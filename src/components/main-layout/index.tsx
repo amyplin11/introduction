@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components'
 import { ContentGrid } from '../content-grid'
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: minmax(100px, 20%) 1fr ;
+  grid-template-columns: ${(props: {isSidebarOpen: boolean}) => props.isSidebarOpen ? '300px auto' : '80px auto'};
   grid-template-rows: 100px auto;
   grid-template-areas:
-  "header header"
+  "sidebar header"
   "sidebar content";
 `
 
@@ -20,9 +20,9 @@ const Header = styled.div`
 const Sidebar = styled.div`
   display: flex;
   grid-area: sidebar
-  justify-content: center;
-  align-items: center;
   background-color: #E6E6FA
+  width: ${(props: {isSidebarOpen: boolean}) => props.isSidebarOpen ? '300px' : '80px'};
+  align-items: center;
 `
 const Content = styled.div`
   display: flex;
@@ -32,10 +32,14 @@ const Content = styled.div`
 `
 
 export const MainLayout: React.FC = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   return (
-    <Container>
+    <Container isSidebarOpen={isSidebarOpen}>
       <Header>Header</Header>
-      <Sidebar>Sidebar</Sidebar>
+      <Sidebar isSidebarOpen={isSidebarOpen}>Sidebar
+        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>Toggle</button>
+      </Sidebar>
       <Content>
         <ContentGrid/>
       </Content>
